@@ -12,36 +12,36 @@ export class UsersController {
 
   @Post('/login')
   login() {
-    return 'login route';
+    return this.usersService.login();
   }
 
   @Get('/:page')
   getUsers() {
-    return 'get users route';
+    return this.usersService.getUsers();
   }
 
   @Post('/create-account')
   createAccount() {
-    return 'create account route';
+    return this.usersService.createAccount();
   }
 
   @Post('/update-profile/:userId')
   updateProfile() {
-    return 'update profile route';
+    return this.usersService.updateProfile();
   }
 
   @Delete('/delete-account/:userId')
   deleteAccount() {
-    return 'delete account route';
+    return this.usersService.deleteAccount();
   }
 
   @Post('/vote/:userId')
   vote() {
-    return 'vote route';
+    return this.usersService.vote();
   }
 
   @Post('/update-avatar')
   updateAvatar() {
-    return 'update avatar route';
+    return this.usersService.updateAvatar();
   }
 }
