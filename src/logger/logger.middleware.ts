@@ -8,10 +8,3 @@ export class LoggerMiddleware implements NestMiddleware {
     next();
   }
 }
-
-// TODO:
-// At src\users\users.module.ts apply middleware only for needed routes
-// Add prisma
-// Add new database
-// Implement isAuthorized copy
-// Implement isAdmin

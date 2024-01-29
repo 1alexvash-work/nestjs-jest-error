@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, RequestMethod } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { LoggerMiddleware } from '../logger/logger.middleware';
@@ -9,6 +9,8 @@ import { LoggerMiddleware } from '../logger/logger.middleware';
 })
 export class UsersModule {
   configure(consumer) {
-    consumer.apply(LoggerMiddleware).forRoutes(UsersController);
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: 'users/login', method: RequestMethod.POST });
   }
 }
