@@ -6,7 +6,8 @@ export class UsersService {
     return 'Hello World!';
   }
 
-  login() {
+  login(userId: string) {
+    console.log('userId:', userId);
     return 'login route';
   }
 
