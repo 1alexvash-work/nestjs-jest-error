@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -15,8 +15,9 @@ export class UsersController {
     return this.usersService.login();
   }
 
-  @Get(':page')
-  getUsers() {
+  @Get('page/:pageId')
+  getUsers(@Param('pageId') pageId: string) {
+    console.log({ pageId });
     return this.usersService.getUsers();
   }
 
