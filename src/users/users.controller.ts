@@ -10,37 +10,37 @@ export class UsersController {
     return this.usersService.sayHelloWorld();
   }
 
-  @Post('/login')
+  @Post('login')
   login() {
     return this.usersService.login();
   }
 
-  @Get('/:page')
+  @Get(':page')
   getUsers() {
     return this.usersService.getUsers();
   }
 
-  @Post('/create-account')
+  @Post('create-account')
   createAccount() {
     return this.usersService.createAccount();
   }
 
-  @Post('/update-profile/:userId')
+  @Post('update-profile/:userId')
   updateProfile() {
     return this.usersService.updateProfile();
   }
 
-  @Delete('/delete-account/:userId')
+  @Delete('delete-account/:userId')
   deleteAccount() {
     return this.usersService.deleteAccount();
   }
 
-  @Post('/vote/:userId')
+  @Post('vote/:userId')
   vote() {
     return this.usersService.vote();
   }
 
-  @Post('/update-avatar')
+  @Post('update-avatar')
   updateAvatar() {
     return this.usersService.updateAvatar();
   }
