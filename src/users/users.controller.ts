@@ -43,6 +43,52 @@ export class UsersController {
     return token;
   }
 
+  @Post('create-account')
+  async createAccount(
+    @Body()
+    {
+      nickname,
+      firstName,
+      lastName,
+      password,
+    }: {
+      nickname: string;
+      firstName: string;
+      lastName: string;
+      password: string;
+    },
+  ) {
+    const someFieldIsMissing =
+      !nickname || !firstName || !lastName || !password;
+
+    if (someFieldIsMissing) {
+      const missingFields: string[] = [];
+
+      if (!nickname) missingFields.push('nickname');
+      if (!firstName) missingFields.push('firstName');
+      if (!lastName) missingFields.push('lastName');
+      if (!password) missingFields.push('password');
+
+      throw new HttpException(
+        `Missing required fields: ${missingFields.join(', ')}`,
+        400,
+      );
+    }
+
+    try {
+      const result = await this.usersService.createAccount({
+        nickname,
+        firstName,
+        lastName,
+        password,
+      });
+
+      return result;
+    } catch (error) {
+      throw new HttpException('Internal server error', 500);
+    }
+  }
+
   @Get('page/:pageId')
   getUsers(@Param('pageId') pageId: string) {
     console.log({ pageId });
@@ -50,14 +96,6 @@ export class UsersController {
     // const usersPerPage = 10;
 
     return this.usersService.getUsers();
-  }
-
-  @Post('create-account')
-  createAccount(
-    @Body() { username, password }: { username: string; password: string },
-  ) {
-    console.log({ username, password });
-    return this.usersService.createAccount();
   }
 
   @Post('update-profile/:userId')

@@ -15,7 +15,17 @@ export class UsersService {
     return 'get users route';
   }
 
-  createAccount() {
+  createAccount({
+    nickname,
+    firstName,
+    lastName,
+    password,
+  }: {
+    nickname: string;
+    firstName: string;
+    lastName: string;
+    password: string;
+  }) {
     return 'create account route';
   }
 
