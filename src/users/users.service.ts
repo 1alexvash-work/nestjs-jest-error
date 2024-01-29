@@ -8,11 +8,7 @@ export class UsersService {
 
   login(userId: string) {
     console.log('userId:', userId);
-    return 'login route';
-  }
-
-  getUsers() {
-    return 'get users route';
+    return 'login service';
   }
 
   createAccount({
@@ -26,22 +22,36 @@ export class UsersService {
     lastName: string;
     password: string;
   }) {
-    return 'create account route';
+    return 'create account service';
   }
 
-  updateProfile() {
-    return 'update profile route';
+  getUsers(page, usersPerPage) {
+    return 'get users service';
   }
 
-  deleteAccount() {
-    return 'delete account route';
+  updateProfile({
+    userId,
+    firstName,
+    lastName,
+    newPassword,
+  }: {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    newPassword: string;
+  }) {
+    return 'update profile service';
   }
 
-  vote() {
-    return 'vote route';
+  deleteAccount(userId: string) {
+    return 'delete account service';
   }
 
-  updateAvatar() {
-    return 'update avatar route';
+  vote({ voterId, votedForId }: { voterId: string; votedForId: string }) {
+    return 'vote service';
+  }
+
+  updateAvatar({ userId, file }: { userId: string; file: File }) {
+    return 'update avatar service';
   }
 }
