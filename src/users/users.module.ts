@@ -1,7 +1,7 @@
 import { Module, RequestMethod } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { LoggerMiddleware } from '../logger/logger.middleware';
+import { isAuthorized, isAdmin } from '../middleware';
 
 @Module({
   providers: [UsersService],
@@ -10,7 +10,21 @@ import { LoggerMiddleware } from '../logger/logger.middleware';
 export class UsersModule {
   configure(consumer) {
     consumer
-      .apply(LoggerMiddleware)
-      .forRoutes({ path: 'users/login', method: RequestMethod.POST });
+      .apply(isAuthorized)
+      .forRoutes(
+        { path: 'users/vote/:userId', method: RequestMethod.POST },
+        { path: 'users/update-avatar', method: RequestMethod.POST },
+      )
+      .apply(isAdmin)
+      .forRoutes(
+        {
+          path: 'users/update-profile/:userId',
+          method: RequestMethod.POST,
+        },
+        {
+          path: 'users/delete-account/:userId',
+          method: RequestMethod.DELETE,
+        },
+      );
   }
 }
