@@ -1,0 +1,31 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  nickname  String @unique
+  firstName String
+  lastName  String
+  password  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt String   @default("null")
+
+  votes Int @default(0)
+
+  role String @default("user")
+
+  avatar String @default("https://i.imgur.com/6VBx3io.png")
+}
+
+model UserVotes {
+  userId String   @id @default(auto()) @map("_id") @db.ObjectId
+  votes  String[]
+}
