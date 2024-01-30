@@ -93,8 +93,6 @@ export class UsersController {
 
   @Get('page/:page')
   async getUsers(@Param('page') page: string) {
-    console.log({ page });
-
     const usersPerPage = 10;
 
     if (isNaN(Number(page))) {
@@ -124,20 +122,6 @@ export class UsersController {
       throw new HttpException('Invalid user ID format', 400);
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        id: String(userId),
-      },
-    });
-
-    if (!user) {
-      throw new HttpException('User not found', 404);
-    }
-
-    if ((user.role as UserRole) !== 'admin') {
-      throw new HttpException('Only admins can delete accounts', 403);
-    }
-
     const someFieldIsMissing = !firstName && !lastName && !newPassword;
     if (someFieldIsMissing) {
       throw new HttpException('No fields to update', 400);
@@ -155,8 +139,6 @@ export class UsersController {
     } catch (error) {
       throw new HttpException('Internal server error', 500);
     }
-
-    // return this.usersService.updateProfile();
   }
 
   @Delete('delete-account/:userId')
