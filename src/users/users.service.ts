@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import FormData from 'form-data';
 import axios from 'axios';
 
