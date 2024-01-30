@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import * as jwt from 'jsonwebtoken';
-import FormData from 'form-data';
+import * as FormData from 'form-data';
 import axios from 'axios';
 
 const prisma = new PrismaClient();
@@ -175,17 +175,7 @@ export class UsersService {
     }
   }
 
-  async updateAvatar({
-    userId,
-    file,
-  }: {
-    userId: string;
-    file: {
-      buffer: Buffer;
-      originalname: string;
-      mimetype: string;
-    };
-  }) {
+  async updateAvatar({ userId, file }: { userId: string; file: any }) {
     const avatarLambdaFunction3URL =
       'https://omkogr5ya77d4o6q2otgewyrbm0agfpy.lambda-url.eu-north-1.on.aws/upload-s3-image';
 
@@ -216,7 +206,11 @@ export class UsersService {
 
       return 'Avatar updated';
     } catch (error) {
-      return error;
+      console.log('error:', error);
+      throw new HttpException(
+        'Something went wrong while uploading a file',
+        500,
+      );
     }
   }
 }

@@ -7,10 +7,12 @@ import {
   Param,
   Post,
   Req,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PrismaClient } from '@prisma/client';
 import { checkIfObjectIDIsValid } from 'src/helpers';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 const prisma = new PrismaClient();
 
@@ -211,24 +213,27 @@ export class UsersController {
   }
 
   @Post('update-avatar')
-  async updateAvatar() {
-    // TODO: figure out how to get req.file
-    // const file = req.file;
-    // if (!file) {
-    //   throw new HttpException('No file uploaded', 400);
-    // }
-    // if (!file.mimetype.includes('image')) {
-    //   throw new HttpException('Only images are allowed', 400);
-    // }
-    // try {
-    //   const result = await this.usersService.updateAvatar({
-    //     userId: req.user.userId,
-    //     file,
-    //   });
-    //   return result;
-    // } catch (error) {
-    //   throw new HttpException('Internal server error', 500);
-    // }
-    // return this.usersService.updateAvatar();
+  @UseInterceptors(FileInterceptor('file'))
+  async updateAvatar(@Req() req: Request & { file: any } & { user: any }) {
+    const file = req.file;
+
+    if (!file) {
+      throw new HttpException('No file uploaded', 400);
+    }
+
+    if (!file.mimetype.includes('image')) {
+      throw new HttpException('Only images are allowed', 400);
+    }
+
+    try {
+      const result = await this.usersService.updateAvatar({
+        userId: req.user.userId,
+        file,
+      });
+
+      return result;
+    } catch (error) {
+      throw new HttpException('Internal server error', 500);
+    }
   }
 }
