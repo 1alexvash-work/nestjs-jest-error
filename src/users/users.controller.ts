@@ -6,11 +6,11 @@ import {
   HttpException,
   Param,
   Post,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PrismaClient } from '@prisma/client';
 import { checkIfObjectIDIsValid } from 'src/helpers';
-import { UserRole } from 'src/types';
 
 const prisma = new PrismaClient();
 
@@ -127,6 +127,16 @@ export class UsersController {
       throw new HttpException('No fields to update', 400);
     }
 
+    const user = await prisma.user.findUnique({
+      where: {
+        id: String(userId),
+      },
+    });
+
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
     try {
       await this.usersService.updateProfile({
         userId,
@@ -160,10 +170,6 @@ export class UsersController {
       throw new HttpException('User not found', 404);
     }
 
-    if ((user.role as UserRole) !== 'admin') {
-      throw new HttpException('Only admins can delete accounts', 403);
-    }
-
     try {
       await this.usersService.deleteAccount(userId);
 
@@ -171,36 +177,37 @@ export class UsersController {
     } catch (error) {
       throw new HttpException('Internal server error', 500);
     }
-
-    // return this.usersService.deleteAccount();
   }
 
   @Post('vote/:userId')
-  async vote() {
-    // TODO: figure out how to extract req.query.userId after implementing middleware
-    // const voterId = req.user.userId;
-    // const votedForId = req.params.userId;
-    // if (!checkIfObjectIDIsValid(votedForId)) {
-    //   throw new HttpException('Invalid user ID format', 400);
-    // }
-    // if (voterId === votedForId) {
-    //   throw new HttpException('You cannot vote for yourself', 400);
-    // }
-    // const votedForUser = await prisma.user.findUnique({
-    //   where: {
-    //     id: votedForId,
-    //   },
-    // });
-    // if (!votedForUser) {
-    //   throw new HttpException('User not found', 404);
-    // }
-    // try {
-    //   const message = await this.usersService.vote({ voterId, votedForId });
-    //   return message;
-    // } catch (error) {
-    //   throw new HttpException('Internal server error', 500);
-    // }
-    // return this.usersService.vote();
+  async vote(@Param('userId') userId: string, @Req() req: any) {
+    const voterId = req.user.userId;
+    const votedForId = req.params.userId;
+
+    if (!checkIfObjectIDIsValid(votedForId)) {
+      throw new HttpException('Invalid user ID format', 400);
+    }
+
+    if (voterId === votedForId) {
+      throw new HttpException('You cannot vote for yourself', 400);
+    }
+
+    const votedForUser = await prisma.user.findUnique({
+      where: {
+        id: votedForId,
+      },
+    });
+
+    if (!votedForUser) {
+      throw new HttpException('User not found', 404);
+    }
+
+    try {
+      const message = await this.usersService.vote({ voterId, votedForId });
+      return message;
+    } catch (error) {
+      throw new HttpException('Internal server error', 500);
+    }
   }
 
   @Post('update-avatar')
