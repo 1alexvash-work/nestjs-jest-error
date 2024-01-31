@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import * as jwt from 'jsonwebtoken';
 import * as FormData from 'form-data';
 import axios from 'axios';
+import { AccountDetails } from 'src/types';
 
 const prisma = new PrismaClient();
 
@@ -16,34 +17,21 @@ export class UsersService {
     return token;
   }
 
-  async createAccount({
-    nickname,
-    firstName,
-    lastName,
-    password,
-  }: {
-    nickname: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-  }) {
+  async createAccount(accountDetails: AccountDetails) {
     const existingUser = await prisma.user.findUnique({
       where: {
-        nickname,
+        nickname: accountDetails.nickname,
       },
     });
 
     if (existingUser) {
-      throw new Error(`A user with the nickname "${nickname}" already exists`);
+      throw new Error(
+        `A user with the nickname "${accountDetails.nickname}" already exists`,
+      );
     }
 
     const result = await prisma.user.create({
-      data: {
-        nickname,
-        firstName,
-        lastName,
-        password,
-      },
+      data: accountDetails,
     });
 
     return result;

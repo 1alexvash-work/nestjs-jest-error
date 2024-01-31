@@ -13,6 +13,7 @@ import { UsersService } from './users.service';
 import { PrismaClient } from '@prisma/client';
 import { checkIfObjectIDIsValid } from 'src/helpers';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AccountDetails } from 'src/types';
 
 const prisma = new PrismaClient();
 
@@ -50,29 +51,16 @@ export class UsersController {
   @Post('create-account')
   async createAccount(
     @Body()
-    {
-      nickname,
-      firstName,
-      lastName,
-      password,
-    }: {
-      nickname: string;
-      firstName: string;
-      lastName: string;
-      password: string;
-    },
+    accountDetails: AccountDetails,
   ) {
-    const someFieldIsMissing =
-      !nickname || !firstName || !lastName || !password;
+    const missingFields = [
+      'nickname',
+      'firstName',
+      'lastName',
+      'password',
+    ].filter((field) => !accountDetails[field as keyof AccountDetails]);
 
-    if (someFieldIsMissing) {
-      const missingFields: string[] = [];
-
-      if (!nickname) missingFields.push('nickname');
-      if (!firstName) missingFields.push('firstName');
-      if (!lastName) missingFields.push('lastName');
-      if (!password) missingFields.push('password');
-
+    if (missingFields.length > 0) {
       throw new HttpException(
         `Missing required fields: ${missingFields.join(', ')}`,
         400,
@@ -80,12 +68,7 @@ export class UsersController {
     }
 
     try {
-      const result = await this.usersService.createAccount({
-        nickname,
-        firstName,
-        lastName,
-        password,
-      });
+      const result = await this.usersService.createAccount(accountDetails);
 
       return result;
     } catch (error) {
