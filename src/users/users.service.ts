@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import * as jwt from 'jsonwebtoken';
-import * as FormData from 'form-data';
+import jwt from 'jsonwebtoken';
+import FormData from 'form-data';
 import axios from 'axios';
 import { AccountDetails } from 'src/types';
 
