@@ -15,17 +15,17 @@ const getRandomMood = (moods) => {
 @Controller('moods')
 export class MoodsController {
   @Get('/all')
-  findAll(): AllMoods {
+  findAllMoods(): AllMoods {
     return getRandomMood(allMoods);
   }
 
   @Get('/good')
-  findGood(): GoodMoods {
+  findGoodMoods(): GoodMoods {
     return getRandomMood(goodMoods);
   }
 
   @Get('/bad')
-  findBad(): BadMoods {
+  findBadMoods(): BadMoods {
     return getRandomMood(badMoods);
   }
 }
@@ -40,3 +40,7 @@ export class MoodsController {
 // Figure out auth guards work []
 // Implement auth guard []
 // Implement admin user guard []
+
+// TODO:
+// Plausible try implementing an async jest test
+// It would be a good experience of working with await and async
