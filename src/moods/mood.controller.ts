@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import {
   AllMoods,
   allMoods,
@@ -7,6 +7,7 @@ import {
   BadMoods,
   badMoods,
 } from './moodTypes';
+import { AdminAuthGuard, AuthGuard } from './AuthGuard';
 
 const getRandomMood = (moods) => {
   return moods[Math.floor(Math.random() * moods.length)];
@@ -19,28 +20,15 @@ export class MoodsController {
     return getRandomMood(allMoods);
   }
 
+  @UseGuards(AuthGuard)
   @Get('/good')
   findGoodMoods(): GoodMoods {
     return getRandomMood(goodMoods);
   }
 
+  @UseGuards(AdminAuthGuard)
   @Get('/bad')
   findBadMoods(): BadMoods {
     return getRandomMood(badMoods);
   }
 }
-
-// TODO: business logic
-// One public route [public]
-// One user route [user]
-// One admin route [admin]
-
-// TODO: implement
-// Some testing
-// Figure out auth guards work []
-// Implement auth guard []
-// Implement admin user guard []
-
-// TODO:
-// Plausible try implementing an async jest test
-// It would be a good experience of working with await and async
