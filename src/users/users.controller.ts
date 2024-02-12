@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Req,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -14,6 +15,7 @@ import { PrismaClient } from '@prisma/client';
 import { checkIfObjectIDIsValid } from 'src/helpers';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AccountDetails } from 'src/types';
+import { AdminAuthGuard, AuthGuard } from 'src/moods/AuthGuard';
 
 const prisma = new PrismaClient();
 
@@ -92,6 +94,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AdminAuthGuard)
   @Post('update-profile/:userId')
   async updateProfile(
     @Param('userId')
@@ -136,6 +139,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AdminAuthGuard)
   @Delete('delete-account/:userId')
   async deleteAccount(
     @Param('userId')
@@ -164,6 +168,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Post('vote/:userId')
   async vote(@Param('userId') userId: string, @Req() req: any) {
     const voterId = req.user.userId;
@@ -195,6 +200,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Post('update-avatar')
   @UseInterceptors(FileInterceptor('file'))
   async updateAvatar(@Req() req: Request & { file: any } & { user: any }) {
