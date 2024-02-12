@@ -7,7 +7,7 @@ import {
   BadMoods,
   badMoods,
 } from './moodTypes';
-import { AdminAuthGuard, AuthGuard } from './AuthGuard';
+import { AdminAuthGuard, AuthGuard } from '../helpers/AuthGuard';
 
 const getRandomMood = (moods) => {
   return moods[Math.floor(Math.random() * moods.length)];

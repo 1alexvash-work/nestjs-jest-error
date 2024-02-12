@@ -15,7 +15,7 @@ import { PrismaClient } from '@prisma/client';
 import { checkIfObjectIDIsValid } from 'src/helpers';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AccountDetails } from 'src/types';
-import { AdminAuthGuard, AuthGuard } from 'src/moods/AuthGuard';
+import { AdminAuthGuard, AuthGuard } from 'src/helpers/AuthGuard';
 
 const prisma = new PrismaClient();
 
