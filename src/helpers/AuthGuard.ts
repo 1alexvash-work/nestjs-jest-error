@@ -9,7 +9,7 @@ type TokenTypes = 'user' | 'admin';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const bearerToken = context.switchToHttp().getRequest()
       .headers.authorization;
 
@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
 
 @Injectable()
 export class AdminAuthGuard extends AuthGuard {
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const bearerToken = context.switchToHttp().getRequest()
       .headers.authorization;
 
